@@ -34,16 +34,20 @@ class Entity:
             self.stamina.remaining_value += eq.stamina_modifier
         self.status_effects = []
 
+    def check_overflow(self):
+        self.health.check_overflow()   
+        self.action_points.check_overflow()   
+        self.armour.check_overflow()   
+        self.move.check_overflow()   
+        self.stamina.check_overflow()   
+
     def equip_item(self, equipment : Equipment):
         self.equipment.append(equipment)
         self.move.cumulative_modifier += equipment.move_modifier
-        self.move.check_overflow()   
         self.action_points.cumulative_modifier += equipment.ap_modifier
-        self.action_points.check_overflow()   
         self.armour.cumulative_modifier += equipment.armour_modifier
-        self.armour.check_overflow()   
         self.stamina.cumulative_modifier += equipment.stamina_modifier
-        self.stamina.check_overflow()
+        self.check_overflow()
 
     def equip_weapon(self, weapon : Weapons):
         self.weapons.append(weapon)
@@ -54,13 +58,10 @@ class Entity:
         if equipment in self.equipment:
             self.equipment.remove(equipment)
             self.move.cumulative_modifier -= equipment.move_modifier
-            self.move.check_overflow()   
             self.action_points.cumulative_modifier -= equipment.ap_modifier
-            self.action_points.check_overflow()
             self.armour.cumulative_modifier -= equipment.armour_modifier
-            self.armour.check_overflow()   
             self.stamina.cumulative_modifier -= equipment.stamina_modifier
-            self.stamina.check_overflow()   
+            self.check_overflow()
 
     def drop_weapon(self, weapon : Weapons):
         if weapon in self.weapons:
@@ -105,15 +106,11 @@ class Entity:
                 self.status_effects.remove(effect)
 
         self.health.remaining_value += self.health.regen_rate
-        self.health.check_overflow()   
         self.action_points.remaining_value += self.action_points.regen_rate
-        self.action_points.check_overflow()   
         self.armour.remaining_value += self.armour.regen_rate
-        self.armour.check_overflow()   
         self.move.remaining_value += self.move.regen_rate
-        self.move.check_overflow()   
         self.stamina.remaining_value += self.stamina.regen_rate
-        self.stamina.check_overflow()   
+        self.check_overflow()
 
 
 
