@@ -8,3 +8,7 @@ class Custom_stat:
     @property
     def possible_max(self):
         return self.max_value + self.cumulative_modifier
+
+    def check_overflow(self):
+        if self.remaining_value >= self.possible_max:
+                self.remaining_value = self.possible_max

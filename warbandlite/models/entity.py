@@ -37,46 +37,36 @@ class Entity:
     def equip_item(self, equipment : Equipment):
         self.equipment.append(equipment)
         self.move.cumulative_modifier += equipment.move_modifier
-        if self.move.remaining_value >= self.move.possible_max:
-            self.move.remaining_value = self.move.possible_max
+        self.move.check_overflow()   
         self.action_points.cumulative_modifier += equipment.ap_modifier
-        if self.action_points.remaining_value >= self.action_points.possible_max:
-            self.action_points.remaining_value = self.action_points.possible_max
+        self.action_points.check_overflow()   
         self.armour.cumulative_modifier += equipment.armour_modifier
-        if self.armour.remaining_value >= self.armour.possible_max:
-            self.armour.remaining_value = self.armour.possible_max
+        self.armour.check_overflow()   
         self.stamina.cumulative_modifier += equipment.stamina_modifier
-        if self.stamina.remaining_value >= self.stamina.possible_max:
-            self.stamina.remaining_value = self.stamina.possible_max
+        self.stamina.check_overflow()
 
     def equip_weapon(self, weapon : Weapons):
         self.weapons.append(weapon)
         self.stamina.cumulative_modifier += weapon.fatigue_malus
-        if self.stamina.remaining_value >= self.stamina.possible_max:
-            self.stamina.remaining_value = self.stamina.possible_max
+        self.stamina.check_overflow()
 
     def drop_item(self, equipment : Equipment):
         if equipment in self.equipment:
             self.equipment.remove(equipment)
             self.move.cumulative_modifier -= equipment.move_modifier
-            if self.move.remaining_value >= self.move.possible_max:
-                self.move.remaining_value = self.move.possible_max   
+            self.move.check_overflow()   
             self.action_points.cumulative_modifier -= equipment.ap_modifier
-            if self.action_points.remaining_value >= self.action_points.possible_max:
-                self.action_points.remaining_value = self.action_points.possible_max
+            self.action_points.check_overflow()
             self.armour.cumulative_modifier -= equipment.armour_modifier
-            if self.armour.remaining_value >= self.armour.possible_max:
-                self.armour.remaining_value = self.armour.possible_max
+            self.armour.check_overflow()   
             self.stamina.cumulative_modifier -= equipment.stamina_modifier
-            if self.stamina.remaining_value >= self.stamina.possible_max:
-                self.stamina.remaining_value = self.stamina.possible_max
+            self.stamina.check_overflow()   
 
     def drop_weapon(self, weapon : Weapons):
         if weapon in self.weapons:
             self.weapons.remove(weapon)
             self.stamina.cumulative_modifier -= weapon.fatigue_malus
-            if self.stamina.remaining_value >= self.stamina.possible_max:
-                self.stamina.remaining_value = self.stamina.possible_max
+            self.stamina.check_overflow()   
 
     def take_attack(self, damage : int, armour_damage_percent : float, status_effects : Iterable):
         health_damage = damage*(1 - armour_damage_percent)
@@ -115,20 +105,15 @@ class Entity:
                 self.status_effects.remove(effect)
 
         self.health.remaining_value += self.health.regen_rate
-        if self.health.remaining_value >= self.health.possible_max:
-            self.health.remaining_value = self.health.possible_max
+        self.health.check_overflow()   
         self.action_points.remaining_value += self.action_points.regen_rate
-        if self.action_points.remaining_value >= self.action_points.possible_max:
-            self.action_points.remaining_value = self.action_points.possible_max
+        self.action_points.check_overflow()   
         self.armour.remaining_value += self.armour.regen_rate
-        if self.armour.remaining_value >= self.armour.possible_max:
-            self.armour.remaining_value = self.armour.possible_max
+        self.armour.check_overflow()   
         self.move.remaining_value += self.move.regen_rate
-        if self.move.remaining_value >= self.move.possible_max:
-            self.move.remaining_value = self.move.possible_max
+        self.move.check_overflow()   
         self.stamina.remaining_value += self.stamina.regen_rate
-        if self.stamina.remaining_value >= self.stamina.possible_max:
-            self.stamina.remaining_value = self.stamina.possible_max
+        self.stamina.check_overflow()   
 
 
 
